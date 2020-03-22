@@ -26,7 +26,9 @@ export class CLIHelper {
       path = Utils.normalizePath(path);
 
       if (await pathExists(path)) {
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
         const config = require(path);
+
         return new Configuration(config.default || config, validate);
       }
     }
@@ -118,7 +120,7 @@ export class CLIHelper {
       text = highlight(text, { language, ignoreIllegals: true, theme: config.getHighlightTheme() });
     }
 
-    // tslint:disable-next-line:no-console
+    // eslint-disable-next-line no-console
     console.log(text);
   }
 
@@ -164,6 +166,7 @@ export class CLIHelper {
     const path = process.cwd() + '/node_modules/' + name + '/package.json';
 
     if (await pathExists(path)) {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
       const pkg = require(path);
       return chalk.green(pkg.version);
     }

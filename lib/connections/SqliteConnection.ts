@@ -1,8 +1,10 @@
 import { ensureDir, readFile } from 'fs-extra';
 import { dirname } from 'path';
 import { Config } from 'knex';
+import Bluebird from 'bluebird';
 
-const Bluebird = require('bluebird');
+// @ts-ignore
+import Dialect from 'knex/lib/dialects/sqlite3/index.js';
 
 import { AbstractSqlConnection } from './AbstractSqlConnection';
 
@@ -54,13 +56,11 @@ export class SqliteConnection extends AbstractSqlConnection {
   }
 
   /**
-   * monkey patch knex' sqlite dialect so it returns inserted id when doing raw insert query
+   * monkey patch knex' sqlite Dialect so it returns inserted id when doing raw insert query
    */
   private getPatchedDialect() {
-    const dialect = require('knex/lib/dialects/sqlite3/index.js');
-
-    const processResponse = dialect.prototype.processResponse;
-    dialect.prototype.processResponse = (obj: any, runner: any) => {
+    const processResponse = Dialect.prototype.processResponse;
+    Dialect.prototype.processResponse = (obj: any, runner: any) => {
       if (obj.method === 'raw' && obj.sql.trim().match('^insert into|update|delete')) {
         return obj.context;
       }
@@ -68,7 +68,7 @@ export class SqliteConnection extends AbstractSqlConnection {
       return processResponse(obj, runner);
     };
 
-    dialect.prototype._query = (connection: any, obj: any) => {
+    Dialect.prototype._query = (connection: any, obj: any) => {
       const callMethod = this.getCallMethod(obj);
 
       return new Bluebird((resolve: any, reject: any) => {
@@ -90,7 +90,7 @@ export class SqliteConnection extends AbstractSqlConnection {
       });
     };
 
-    return dialect;
+    return Dialect;
   }
 
   private getCallMethod(obj: any): string {

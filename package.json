@@ -1,4 +1,3 @@
-
 {
   "name": "mikro-orm",
   "version": "4.0.0-alpha.0",
@@ -45,7 +44,7 @@
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "run-rs": "run-rs -v 4.2.3 -l ubuntu1804",
     "run-rs-in-background": "yarn run-rs > /dev/null 2>&1 &",
-    "lint": "tslint -p ."
+    "lint": "eslint lib/**/*.ts"
   },
   "bin": {
     "mikro-orm": "./dist/cli.js"
@@ -74,7 +73,7 @@
   },
   "lint-staged": {
     "*.ts": [
-      "tslint --fix",
+      "eslint lib/**/*.ts --fix",
       "git add"
     ]
   },
@@ -142,10 +141,14 @@
     "@types/umzug": "^2.2.3",
     "@types/uuid": "^7.0.2",
     "@types/webpack-env": "^1.15.1",
+    "@typescript-eslint/eslint-plugin": "^2.24.0",
+    "@typescript-eslint/parser": "^2.24.0",
     "conditional-type-checks": "^1.0.5",
     "conventional-changelog-angular": "^5.0.6",
     "conventional-changelog-cli": "^2.0.31",
     "coveralls": "^3.0.11",
+    "eslint": "^6.8.0",
+    "eslint-plugin-jsdoc": "^22.1.0",
     "husky": "^4.2.3",
     "jest": "^24.9.0",
     "lint-staged": "^10.0.8",
@@ -159,9 +162,6 @@
     "sqlite3": "^4.1.1",
     "ts-jest": "^25.2.1",
     "ts-node": "^8.7.0",
-    "tslint": "^6.1.0",
-    "tslint-eslint-rules": "^5.4.0",
-    "tslint-lines-between-class-members": "^1.3.6",
     "typescript": "3.8.3"
   }
 }
